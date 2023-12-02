@@ -1,26 +1,20 @@
 version: "3.9"
 
 services:
-
-  hello-world:
-    image: "traefik/whoami"
-    container_name: "simple-service"
+  cf-ozeliurs-com:
+    image: nginx
+    container_name: cf-ozeliurs-com
     restart: unless-stopped
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
     networks:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.simple-service.rule=Host(`hello-world.${BASE_DOMAIN:-ozeliurs.com}`)"
-      - "traefik.http.routers.simple-service.entrypoints=websecure"
-      - "traefik.http.routers.simple-service.tls=true"
-      - "traefik.http.routers.simple-service.tls.certresolver=cloudflare"
-      - "traefik.http.services.simple-service.loadbalancer.server.port=80"
-    healthcheck:
-      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:80" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
+      - "traefik.http.routers.cf-ozeliurs-com.rule=Host(`cf.ozeliurs.com`)"
+      - "traefik.http.routers.cf-ozeliurs-com.entrypoints=websecure"
+      - "traefik.http.routers.cf-ozeliurs-com.tls=true"
+      - "traefik.http.routers.cf-ozeliurs-com.tls.certresolver=cloudflare"
 
 networks:
   traefik:
